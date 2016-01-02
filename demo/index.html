@@ -5,8 +5,25 @@
 		<title>Electron boilerplate</title>
 		<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 		<link rel="import" href="../express-server.html">
+		<link rel="import" href="../express-route.html">
 	</head>
 	<body>
-		<express-server></express-server>
+		<template id="app" is="dom-bind">
+			<express-server port="8080">
+				<express-route method="get" path="/" middleware="[[_home]]"></express-route>
+			</express-server>
+		</template>
+		<script>
+		(function(){
+			'use strict';
+			const app = document.getElementById("app");
+
+			app._home = () => {
+				return (req, res) => {
+					res.send("hello world");
+				};
+			}
+		})();
+		</script>
 	</body>
 </html>

@@ -1,16 +1,29 @@
-<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="express-route.html">
+<!--
+`<express-server>` is an web component which will run an express server inside of the electron envirement.
+
+### Example
+```
+<express-server port="8080">
+  <express-get path="/" middleware="_home"></express-get>
+</express-server>
+
+...
+
+_home(req, res) {
+  res.send("Hello world");
+}
+```
+-->
 <dom-module id="express-server">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-
+    <content></content>
   </template>
   <script>
     (function (Polymer, express) {
       'use strict';
+      let app = express();
       class ExpressServer {
         beforeRegister() {
           this.is = 'express-server';
@@ -18,21 +31,22 @@
           this.properties = {
             /* The Express Application */
             app: {
-              type: Object,
-              value: express
+              type: Object
             },
 
             /** The port that the applicaiton will run on. */
             port: {
               type: Number,
-              value: 3000
+              value: 3000,
+              notify: true,
+              reflectToAttribute: true
             }
           };
         }
 
-        ready() {
+        attached() {
+          this.app = app;
           this.app.listen(this.port);
-          console.log(`Express App running on port ${this.port}`);
         }
       }
 

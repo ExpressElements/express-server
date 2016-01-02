@@ -1,0 +1,53 @@
+<link rel="import" href="../polymer/polymer.html">
+<script>
+  (function (Polymer) {
+    'use strict';
+    /**
+    * `<express-route>` A webcomponent around express routing.
+    *
+    * ### Usage:
+    * ```html
+    * <express-server port="8080">
+    *   <express-route method="get" path="/" middleware="[[_home()]]"></express-route>
+    * </express-server>
+    * ```
+    *
+    * ...
+    *
+    * ```
+    * _home = () => {
+    *   return function (req, res) {
+    *     res.send("hello world2");
+    *   };
+    * }
+    *```
+    */
+    class ExpressRoute {
+      beforeRegister() {
+        this.is = 'express-route';
+
+        this.properties = {
+          /** */
+          method: {
+            type: String
+          },
+
+          path: {
+            type: String
+          },
+
+          middleware: {
+            type: Object
+          }
+        };
+      }
+
+      attached() {
+        this.parentElement.app[this.method](this.path, this.middleware);
+      }
+
+    }
+
+    Polymer(ExpressRoute);
+  })(Polymer);
+</script>
